@@ -45,15 +45,18 @@ jobs:
         sonar-scanner --version
       shell: bash
 
-    - name: Run SonarCloud analysis
+    - name: Run SonarScanner
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
+        export JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.13-11/x64
+        export PATH=$JAVA_HOME/bin:$PATH
         sonar-scanner \
           -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel \
           -Dsonar.organization=abhishekherbertsamuel \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
 
 
 
