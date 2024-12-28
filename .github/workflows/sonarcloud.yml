@@ -4,11 +4,15 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   sonarcloud:
     name: SonarCloud Scan
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
@@ -23,11 +27,16 @@ jobs:
           curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
           unzip sonar-scanner-cli.zip
           export PATH="$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH"
+          echo "PATH is: $PATH"
+          sonar-scanner --version  # Verify if sonar-scanner is installed correctly
 
       - name: Run SonarCloud Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           sonar-scanner \
             -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel \
             -Dsonar.organization=abhishekherbertsamuel \
+            -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
