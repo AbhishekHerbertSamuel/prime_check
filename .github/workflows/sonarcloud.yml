@@ -23,14 +23,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache SonarCloud dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: |
-            ${{ runner.os }}-sonar
-
       - name: Download and Install SonarScanner
         run: |
           curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
@@ -56,7 +48,6 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         shell: bash
-
 
 
 
