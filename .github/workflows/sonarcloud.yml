@@ -1,4 +1,4 @@
-name: SonarCloud Analysis
+name: SonarQube Analysis
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  sonarcloud:
-    name: SonarCloud Scan
+  sonarQube:
+    name: SonarQube Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -23,32 +23,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Download and Install SonarScanner
-        run: |
-          curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-          unzip -o sonar-scanner-cli.zip
-          mv sonar-scanner-4.7.0.2747-linux sonar-scanner
-          echo "PATH=$PWD/sonar-scanner/bin:$PATH" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Verify Installation
-        run: |
-          echo "Verifying Java and SonarScanner installation..."
-          java -version
-          sonar-scanner --version
-        shell: bash
-
-      - name: Run SonarCloud Analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel \
-            -Dsonar.organization=abhishekherbertsamuel \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-        shell: bash
-
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel
+            -Dsonar.organization=abhishekherbertsamuel
 
 
 
