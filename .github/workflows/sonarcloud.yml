@@ -31,25 +31,30 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-sonar
 
-    - name: Install SonarScanner
+    - name: Download and Install SonarScanner
       run: |
         curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-        unzip sonar-scanner-cli.zip
+        unzip -o sonar-scanner-cli.zip
         mv sonar-scanner-4.7.0.2747-linux sonar-scanner
         echo "PATH=$PWD/sonar-scanner/bin:$PATH" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Verify Installation
+      run: |
+        echo "Verifying SonarScanner Installation"
+        sonar-scanner --version
+      shell: bash
 
     - name: Run SonarCloud analysis
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.13-11/x64
-        PATH: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.13-11/x64/bin:$PATH
       run: |
-        java -version  # Verify Java 17 is being used
         sonar-scanner \
           -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel \
           -Dsonar.organization=abhishekherbertsamuel \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
 
 
 
