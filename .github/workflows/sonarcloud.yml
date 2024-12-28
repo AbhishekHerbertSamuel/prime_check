@@ -26,17 +26,17 @@ jobs:
         run: |
           curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
           unzip sonar-scanner-cli.zip
-          export PATH="$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH"
-          echo "PATH is: $PATH"
-          sonar-scanner --version  # Verify if sonar-scanner is installed correctly
+          mv sonar-scanner-4.7.0.2747-linux sonar-scanner
+          echo "PATH=$PWD/sonar-scanner/bin:\$PATH" >> $GITHUB_ENV
+          echo "SonarScanner installed successfully."
 
       - name: Run SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          PATH: ${{ env.PATH }}
         run: |
           sonar-scanner \
             -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel \
             -Dsonar.organization=abhishekherbertsamuel \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
