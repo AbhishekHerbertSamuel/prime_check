@@ -1,4 +1,4 @@
-name: SonarQube Analysis
+name: SonarQube Cloud Scan
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  sonarQube:
-    name: SonarQube Scan
+  sonarcloud:
+    name: SonarCloud Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -23,15 +23,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: SonarQube Scan
+      - name: SonarQube Cloud Scan
         uses: SonarSource/sonarqube-scan-action@v4.1.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
             -Dsonar.projectKey=abhishekherbertsamuel_abhishek-herbert-samuel
             -Dsonar.organization=abhishekherbertsamuel
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+
 
 
 
